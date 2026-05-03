@@ -4,21 +4,24 @@
 # that fits your router's RAM. Rough RAM cost in RouterOS 7 DNS cache is
 # ~100-150 bytes per entry (plus the DNS cache size itself).
 #
-#   ~50 k    entries   = small  (hAP ac, hEX with 256 MB RAM is fine)
-#   ~150 k   entries   = medium (sweet spot for most routers)
-#   ~500 k   entries   = large  (only for routers with 512 MB+ RAM)
+#   ~50 k    entries   = small      (hAP ac, hEX with 256 MB RAM is fine)
+#   ~150 k   entries   = medium     (sweet spot for most routers)
+#   ~500 k   entries   = large      (only for routers with 512 MB+ RAM)
+#  ~1.2 M   entries   = full       (CCR / RB5009 / 1 GB+ RAM)
+#  ~1.8 M   entries   = everything  (research / curiosity tier)
 #
 # After editing this file the next workflow run rebuilds and commits.
 # The MikroTik Adlist URL keeps the same path, so no router-side changes.
 #
 # Branch note: IgorKha's repo default branch is "main", not "master".
 #
-# Lists deliberately EXCLUDED (do not add these unless you know you want them):
+# Lists deliberately EXCLUDED from the small/medium/large/full tiers (the
+# "everything" tier still includes them):
 #   - no_google.txt           : breaks Google search, Gmail, Maps, etc.
 #   - hagezi_antipiracy_blocklist.txt
 #   - hagezi_gambling_blocklist.txt
 #   - hagezi_encrypted_dns_vpn_tor_proxy_bypass.txt
-#   - any list with "social" or specific country prefixes you do not need
+#   - country-prefixed lists (CHN/HUN/KOR/POL/etc.)
 #
 # If a future source ever creeps in and blocks something you need, the safest
 # fix is to add the domain to allowlist.txt - it will be removed on the next
@@ -27,7 +30,6 @@
 outputs:
 
   # ----- SMALL TIER (~40-80k entries) -----------------------------------
-  # Light-weight, low false-positive set. Good starting point.
   adlist-small.txt:
     description: "Small balanced list - low memory, low false positives"
     output: adlist-small.txt
@@ -36,7 +38,6 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_basic.txt
 
   # ----- MEDIUM TIER (~150-250k entries) ---------------------------------
-  # The recommended default for most home routers.
   adlist-medium.txt:
     description: "Medium balanced list - ads, trackers, malware, phishing"
     output: adlist-medium.txt
@@ -48,8 +49,6 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/peter_lowe_list.txt
 
   # ----- LARGE TIER (~400-700k entries) ---------------------------------
-  # Aggressive. Use only on routers with plenty of RAM. Higher false-positive
-  # rate - keep allowlist.txt handy.
   adlist-large.txt:
     description: "Large aggressive list - heavy filtering"
     output: adlist-large.txt
@@ -61,3 +60,114 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/curben_phishing_filter.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/urlhaus_filter_online.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/the_big_list_of_hacked_malware_web_sites.txt
+
+  # ----- FULL TIER (~1.0 - 1.3 M entries) -------------------------------
+  # Mirrors Stefan's original 21-entry MikroTik adlist setup, merged into
+  # one file. CCR / RB5009 / 1 GB+ RAM only.
+  adlist-full.txt:
+    description: "Full kitchen-sink list - mirrors original 21 adlists merged"
+    output: adlist-full.txt
+    sources:
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_lite.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_pro.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_xtra.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/adguard_dns_filter.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/adguard_popup_filter.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/awavenue_ads_rule.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/dandelion_sprouts_anti_malware_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/dandelion_sprouts_anti_push_notifications.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/dandelion_sprouts_game_console_adblock_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_pro%2B%2B.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_ultimate.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_full.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/phishing_army.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/scam_blocklist_by_durablenapkin.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/the_big_list_of_hacked_malware_web_sites.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ublock_badware_risks.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperer_tracking_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_dating_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_malware_list.txt
+      - https://raw.githubusercontent.com/StefanKnol/SKFiles/main/mrotik_adlist.txt
+
+  # ----- EVERYTHING TIER (~1.8 - 2.2 M entries) -------------------------
+  # Every file from IgorKha + StevenBlack + Stefan's list. ~3.5 - 4.5 M raw
+  # entries before dedupe. WARNINGS:
+  #   - Includes no_google.txt (allowlist.txt is your safety net).
+  #   - Includes hagezi_allowlist_referral.txt - IgorKha republishes it as
+  #     hosts-format so it acts as a BLOCKLIST here.
+  #   - Includes country lists you probably do not need.
+  #   - Includes hagezi_encrypted_dns_vpn_tor_proxy_bypass which blocks
+  #     DoH/DoT/VPN/Tor providers. Can break things you actually use.
+  #   - For curiosity / research only.
+  adlist-everything.txt:
+    description: "Every IgorKha list + StevenBlack + Stefan - kitchen-sink-of-kitchen-sinks"
+    output: adlist-everything.txt
+    sources:
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_lite.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_pro.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_xtra.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/CHN_adrules.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/CHN_anti_ad.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/HUN_hufilter.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/IDN_abpindo.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/IRN_unwanted_iranian_domains.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ISR_easyList_hebrew.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/KOR_list_kr.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/KOR_youslist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/LIT_easylist_lithuania.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/MKD_macedonian_pi_hole_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/NOR_dandelion_sprouts_anti_malware_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/POL_cert_polska_list_of_malicious_domains.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/POL_polish_filters_for_pi_hole.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/SWE_frellwit_swedish_hosts_file.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/TUR_turk_adlist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/TUR_turkish_ad_hosts.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/VNM_abpvn.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/adguard_dns_filter.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/adguard_popup_filter.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/awavenue_ads_rule.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/curben_phishing_filter.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/dan_pollocks_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/dandelion_sprouts_anti_malware_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/dandelion_sprouts_anti_push_notifications.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/dandelion_sprouts_game_console_adblock_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_allowlist_referral.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_antipiracy_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_apple_tracker_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_badware_hoster_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_dns_rebind_protection.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_dyndns_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_encrypted_dns_vpn_tor_proxy_bypass.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_gambling_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_multinormal.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_oppo_realme_tracker_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_pro%2B%2B.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_pro.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_samsung_tracker_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_the_worlds_most_abused_tlds.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_threat_intelligence_feeds.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_ultimate.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_url_shortener_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_vivo_tracker_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_windows_office_tracker_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_xiaomi_tracking_blocklist.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/no_google.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/nocoin_filter_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_basic.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_full.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/perflyst_dandelion_sprout_smart_tv_blocklist_for_adguard_home.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/peter_lowe_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/phishing_army.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/scam_blocklist_by_durablenapkin.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperer_tracking_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_dating_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_malware_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/staklerware_indicators_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/steven_blacks_list.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/the_big_list_of_hacked_malware_web_sites.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ublock_badware_risks.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ukrainian_security_filter.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/urlhaus_filter_online.txt
+      - https://raw.githubusercontent.com/StefanKnol/SKFiles/main/mrotik_adlist.txt

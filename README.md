@@ -50,13 +50,51 @@ You can also trigger a build manually via Actions -> "Build MikroTik adlist"
 Three outputs are pre-configured. RAM cost in RouterOS 7 DNS cache is roughly
 100-150 bytes per entry, plus the cache size you set.
 
-| Output                | Approx. entries | Recommended for                            |
-| --------------------- | --------------: | ------------------------------------------ |
-| `adlist-small.txt`    |    ~50 000      | hAP lite / hAP ac, 256 MB RAM, anything    |
-| `adlist-medium.txt`   |   ~200 000      | hEX, RB4011, CCR with 256-512 MB           |
-| `adlist-large.txt`    |   ~500 000-700 000 | CCR / RB5009 with >= 512 MB RAM         |
+| Output                | Approx. entries    | Recommended for                            |
+| --------------------- | -----------------: | ------------------------------------------ |
+| `adlist-small.txt`    |    ~50 000         | hAP lite / hAP ac, 256 MB RAM, anything    |
+| `adlist-medium.txt`   |   ~200 000         | hEX, RB4011, CCR with 256-512 MB           |
+| `adlist-large.txt`    |   ~500 000-700 000 | CCR / RB5009 with >= 512 MB RAM            |
+| `adlist-full.txt`     | ~1 000 000-1 300 000 | CCR / RB5009 with 1 GB+ RAM, the kitchen sink |
+| `adlist-everything.txt` | ~1 800 000-2 200 000 | Curiosity tier - every IgorKha list, see warnings below |
 
 If unsure, start with `adlist-small.txt` and watch the router's RAM usage.
+
+### About the `full` tier
+
+This mirrors Stefan's original 21-adlist setup (StevenBlack + 1Hosts family +
+AdGuard + Dandelion Sprouts + Hagezi pro++/ultimate + OISD full + Phishing
+Army + Shadow Whisperer + Stefan's own list) merged into one file. Total raw
+entries across all upstream sources is around **2.52 million**; after dedupe
+it should land at **roughly 1.0 - 1.3 million unique** domains.
+
+Replacing the 21 adlist URLs on the router with one merged URL has two wins:
+
+- The router parses one file instead of 21 - much less CPU during refresh.
+- One static-DNS table instead of 21 overlapping ones - lower RAM and faster
+  lookups.
+
+### About the `everything` tier
+
+This pulls **every** file from `IgorKha/mikrotik-adlist/hosts/` (all 65) plus
+StevenBlack and Stefan's personal list. About 3.5-4.5 million raw entries
+before dedupe; expect roughly 1.8-2.2 million unique after.
+
+It includes lists you probably do **not** want in production:
+
+- `no_google.txt` - would block Google services (mitigated: `google.com`,
+  `googleapis.com`, `gstatic.com`, `googleusercontent.com`, `youtube.com`,
+  and `ytimg.com` are pre-allowlisted, so the parent-domain match strips
+  them all out).
+- `hagezi_allowlist_referral.txt` - IgorKha republishes it in hosts-format,
+  so it acts as a *blocklist* here. Probably not what hagezi intended.
+- `hagezi_encrypted_dns_vpn_tor_proxy_bypass.txt` - blocks DoH/DoT/VPN/Tor
+  providers like `cloudflare-dns.com`, `dns.google`, etc. May break things
+  you actually use.
+- All country-prefixed lists (CHN/HUN/KOR/POL/etc.).
+
+This tier exists for curiosity - to see how big the merged universe really
+gets. Not recommended for daily use; pick `adlist-full.txt` instead.
 
 ## Anti-Google lists are NOT included
 

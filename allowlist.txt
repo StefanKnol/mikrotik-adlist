@@ -1,0 +1,24 @@
+# Domains in this file (and all their sub-domains) are removed from every
+# generated adlist before publishing. One domain per line. '#' starts a comment.
+#
+# Pre-enabled safety net: keep core services working even if a future source
+# starts blocking sub-domains of these. The build script also removes any
+# sub-domain whose parent is allowlisted, so e.g. "maps.google.com" is kept
+# because "google.com" is here.
+
+google.com
+googleapis.com
+gstatic.com
+googleusercontent.com
+youtube.com
+ytimg.com
+
+# Common false-positive prone entries - uncomment if you hit issues.
+#
+# apple.com
+# microsoft.com
+# windowsupdate.com
+# whatsapp.net
+# icloud.com
+# office.com
+# office365.com

@@ -1,0 +1,63 @@
+# Source configuration for build_adlist.py
+#
+# Each entry under "outputs:" produces one merged hosts file. Pick the tier
+# that fits your router's RAM. Rough RAM cost in RouterOS 7 DNS cache is
+# ~100-150 bytes per entry (plus the DNS cache size itself).
+#
+#   ~50 k    entries   = small  (hAP ac, hEX with 256 MB RAM is fine)
+#   ~150 k   entries   = medium (sweet spot for most routers)
+#   ~500 k   entries   = large  (only for routers with 512 MB+ RAM)
+#
+# After editing this file the next workflow run rebuilds and commits.
+# The MikroTik Adlist URL keeps the same path, so no router-side changes.
+#
+# Branch note: IgorKha's repo default branch is "main", not "master".
+#
+# Lists deliberately EXCLUDED (do not add these unless you know you want them):
+#   - no_google.txt           : breaks Google search, Gmail, Maps, etc.
+#   - hagezi_antipiracy_blocklist.txt
+#   - hagezi_gambling_blocklist.txt
+#   - hagezi_encrypted_dns_vpn_tor_proxy_bypass.txt
+#   - any list with "social" or specific country prefixes you do not need
+#
+# If a future source ever creeps in and blocks something you need, the safest
+# fix is to add the domain to allowlist.txt - it will be removed on the next
+# build, including all sub-domains.
+
+outputs:
+
+  # ----- SMALL TIER (~40-80k entries) -----------------------------------
+  # Light-weight, low false-positive set. Good starting point.
+  adlist-small.txt:
+    description: "Small balanced list - low memory, low false positives"
+    output: adlist-small.txt
+    sources:
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_basic.txt
+
+  # ----- MEDIUM TIER (~150-250k entries) ---------------------------------
+  # The recommended default for most home routers.
+  adlist-medium.txt:
+    description: "Medium balanced list - ads, trackers, malware, phishing"
+    output: adlist-medium.txt
+    sources:
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_pro.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_basic.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/phishing_army.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/peter_lowe_list.txt
+
+  # ----- LARGE TIER (~400-700k entries) ---------------------------------
+  # Aggressive. Use only on routers with plenty of RAM. Higher false-positive
+  # rate - keep allowlist.txt handy.
+  adlist-large.txt:
+    description: "Large aggressive list - heavy filtering"
+    output: adlist-large.txt
+    sources:
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/hagezi_pro%2B%2B.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_full.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/phishing_army.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/curben_phishing_filter.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/urlhaus_filter_online.txt
+      - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/the_big_list_of_hacked_malware_web_sites.txt

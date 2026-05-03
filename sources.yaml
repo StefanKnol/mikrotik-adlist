@@ -88,6 +88,17 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperer_tracking_list.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_dating_list.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_malware_list.txt
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/ads
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/analytics
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/general
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/log
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/malware
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/porn
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/smartphone
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/tracker
+      - https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Hosts/GoodbyeAds.txt
+      - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/hosts/light.txt
 
   # ----- ALMOST EVERYTHING TIER (~2.2 - 2.7 M entries) -------------------------
   # Every file from IgorKha + StevenBlack's list. ~3.5 - 4.5 M raw
@@ -98,6 +109,10 @@ outputs:
     output: adlist-almost-everything.txt
     sources:
       - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/data/Badd-Boyz-Hosts/hosts
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_lite.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_pro.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_xtra.txt
@@ -160,6 +175,17 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ublock_badware_risks.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ukrainian_security_filter.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/urlhaus_filter_online.txt
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/ads
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/analytics
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/general
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/log
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/malware
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/porn
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/smartphone
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/tracker
+      - https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Hosts/GoodbyeAds.txt
+      - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/hosts/light.txt
 
   # ----- EVERYTHING TIER (~2.3 - 2.8 M entries) -------------------------
   # Every file from IgorKha + StevenBlack's list. ~3.5 - 4.5 M raw
@@ -176,6 +202,10 @@ outputs:
     output: adlist-everything.txt
     sources:
       - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/data/Badd-Boyz-Hosts/hosts
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/data/mvps.org/hosts
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/data/someonewhocares.org/hosts
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/data/yoyo.org/hosts
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_lite.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_pro.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/1hosts_xtra.txt
@@ -241,3 +271,14 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ublock_badware_risks.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ukrainian_security_filter.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/urlhaus_filter_online.txt
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/ads
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/analytics
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/general
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/log
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/malware
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/porn
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/smartphone
+      - https://raw.githubusercontent.com/ayanagroup-official/hosts/main/mikrotik/tracker
+      - https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Hosts/GoodbyeAds.txt
+      - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/hosts/light.txt

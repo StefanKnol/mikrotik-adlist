@@ -89,11 +89,11 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_dating_list.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_malware_list.txt
 
-  # ----- EVERYTHING TIER (~1.7 - 2.1 M entries) -------------------------
+  # ----- ALMOST EVERYTHING TIER (~2.2 - 2.7 M entries) -------------------------
   # Every file from IgorKha + StevenBlack's list. ~3.5 - 4.5 M raw
   # entries before dedupe. WARNINGS:
   #   - Includes country lists you probably do not need.
-  adlist-near-everything.txt:
+  adlist-almost-everything.txt:
     description: "Almost every IgorKha list + StevenBlack - kitchen-sink-of-kitchen-sinks"
     output: adlist-almost-everything.txt
     sources:
@@ -161,7 +161,7 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ukrainian_security_filter.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/urlhaus_filter_online.txt
 
-  # ----- EVERYTHING TIER (~1.8 - 2.2 M entries) -------------------------
+  # ----- EVERYTHING TIER (~2.3 - 2.8 M entries) -------------------------
   # Every file from IgorKha + StevenBlack's list. ~3.5 - 4.5 M raw
   # entries before dedupe. WARNINGS:
   #   - Includes no_google.txt (allowlist.txt is your safety net).

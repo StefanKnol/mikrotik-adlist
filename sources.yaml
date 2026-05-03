@@ -88,7 +88,6 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperer_tracking_list.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_dating_list.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/shadowwhisperers_malware_list.txt
-      - https://raw.githubusercontent.com/StefanKnol/SKFiles/main/mrotik_adlist.txt
 
   # ----- EVERYTHING TIER (~1.8 - 2.2 M entries) -------------------------
   # Every file from IgorKha + StevenBlack + Stefan's list. ~3.5 - 4.5 M raw
@@ -170,4 +169,3 @@ outputs:
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ublock_badware_risks.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/ukrainian_security_filter.txt
       - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/urlhaus_filter_online.txt
-      - https://raw.githubusercontent.com/StefanKnol/SKFiles/main/mrotik_adlist.txt

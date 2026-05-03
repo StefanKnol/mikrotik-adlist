@@ -1,13 +1,17 @@
 # MikroTik Adlist - adlist-small.txt
-# Description : Small balanced list - low memory, low false positives
-# Generated   : 2026-05-03 13:16:46 UTC
-# Entries     : 136076
-# Sources     : 2
-# 
-#   - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts  (parsed 81826, added 81826)
-#   - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_basic.txt  (parsed 57930, added 54280)
-# 
+# Description         : Small balanced list - low memory, low false positives
+# Generated           : 2026-05-03 13:24:19 UTC
+# Sources             : 2
+# Total raw parsed    : 139756
+# Unique after dedupe : 136106
+# Removed by dedupe   : 3650  (2.6% overlap)
 # Removed by allowlist: 30
+# Final entries       : 136076
+# 
+# Per-source breakdown (parsed / added / dup-against-earlier):
+#   - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts  (parsed 81826, added 81826, dup 0)
+#   - https://raw.githubusercontent.com/IgorKha/mikrotik-adlist/main/hosts/oisd_basic.txt  (parsed 57930, added 54280, dup 3650)
+# 
 #
 0.0.0.0 0-02.net
 0.0.0.0 0.0.0.0.creative.hpyrdr.com

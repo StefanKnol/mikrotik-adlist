@@ -186,6 +186,7 @@ each output file. Useful for sanity-checking before committing changes to
   - curben_phishing_filter
   - urlhaus_filter_online
   - the_big_list_of_hacked_malware_web_sites
+- [ayanagroup-official/hosts](https://github.com/ayanagroup-official/hosts)
 
 Each upstream source keeps its own license; this repo only redistributes the
 deduplicated merge under the same terms.

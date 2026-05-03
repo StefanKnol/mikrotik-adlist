@@ -1,4 +1,4 @@
-# MikroTik Combined Adlist
+# MikroTik Combined De-Duplicated Adlist
 
 Automation that fetches multiple upstream ad-block / malware / phishing host
 lists, deduplicates them, applies a personal allowlist, and publishes a single

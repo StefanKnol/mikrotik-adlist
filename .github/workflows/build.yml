@@ -1,0 +1,71 @@
+name: Build MikroTik adlist
+
+on:
+  schedule:
+    # Every Monday at 04:17 UTC. Adjust if you like.
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - "sources.yaml"
+      - "allowlist.txt"
+      - "scripts/build_adlist.py"
+      - ".github/workflows/build.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-adlist
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet pyyaml
+
+      - name: Build merged adlists
+        run: python scripts/build_adlist.py --config sources.yaml --allowlist allowlist.txt --repo-root .
+
+      - name: Show output sizes
+        run: |
+          echo "Generated files:"
+          ls -lh adlist-*.txt 2>/dev/null || true
+          for file in adlist-*.txt; do
+            if [ -f "$file" ]; then
+              count=$(grep -c -v '^#' "$file" || true)
+              echo "  $file : $count entries"
+            fi
+          done
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mikrotik-adlist
+          path: adlist-*.txt
+          retention-days: 14
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add adlist-*.txt
+          if git diff --cached --quiet; then
+            echo "No changes - skipping commit."
+          else
+            git commit -m "chore(adlist): refresh on $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi

@@ -1,6 +1,6 @@
 # MikroTik Adlist - adlist-small.txt
 # Description : Small balanced list - low memory, low false positives
-# Generated   : 2026-05-03 12:47:37 UTC
+# Generated   : 2026-05-03 12:58:34 UTC
 # Entries     : 135144
 # Sources     : 2
 # 

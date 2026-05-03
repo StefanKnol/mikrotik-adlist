@@ -34,17 +34,6 @@ no extra server is needed.
     adlist-large.txt
 ```
 
-## How to set this up
-
-1. Create a new GitHub repository (any name, e.g. `mikrotik-adlist-merged`).
-2. Copy this folder's contents into the root of that repository.
-3. Commit and push to the `main` branch. The workflow runs automatically and
-   produces `adlist-*.txt`.
-4. Wait one or two minutes, refresh the repo, and confirm the files appeared.
-
-You can also trigger a build manually via Actions -> "Build MikroTik adlist"
--> Run workflow.
-
 ## Picking a tier
 
 Three outputs are pre-configured. RAM cost in RouterOS 7 DNS cache is roughly
@@ -62,11 +51,11 @@ If unsure, start with `adlist-small.txt` and watch the router's RAM usage.
 
 ### About the `full` tier
 
-This mirrors Stefan's original 21-adlist setup (StevenBlack + 1Hosts family +
-AdGuard + Dandelion Sprouts + Hagezi pro++/ultimate + OISD full + Phishing
-Army + Shadow Whisperer + Stefan's own list) merged into one file. Total raw
-entries across all upstream sources is around **2.52 million**; after dedupe
-it should land at **roughly 1.0 - 1.3 million unique** domains.
+This mirrors StevenBlack + 1Hosts family + AdGuard + Dandelion Sprouts + 
+Hagezi pro++/ultimate + OISD full + Phishing Army + Shadow Whisperer 
+merged into one file. Total raw entries across all upstream sources is 
+around **2.52 million**; after dedupe it should land at **roughly 1.0 - 
+1.3 million unique** domains.
 
 Replacing the 21 adlist URLs on the router with one merged URL has two wins:
 
@@ -77,10 +66,10 @@ Replacing the 21 adlist URLs on the router with one merged URL has two wins:
 ### About the `everything` tier
 
 This pulls **every** file from `IgorKha/mikrotik-adlist/hosts/` (all 65) plus
-StevenBlack and Stefan's personal list. About 3.5-4.5 million raw entries
+StevenBlacks list. About 3.5-4.5 million raw entries
 before dedupe; expect roughly 1.8-2.2 million unique after.
 
-It includes lists you probably do **not** want in production:
+It includes lists you probably do **not** want:
 
 - `no_google.txt` - would block Google services (mitigated: `google.com`,
   `googleapis.com`, `gstatic.com`, `googleusercontent.com`, `youtube.com`,
@@ -107,14 +96,10 @@ in `sources.yaml`. Do not add it.
 
 ## Configure the MikroTik (RouterOS 7.22.1)
 
-Replace `YOUR_USER`, `YOUR_REPO` and `adlist-medium.txt` to match what you
-publish. The URL is the raw file URL from GitHub (you can copy it from the
-file's "Raw" button).
-
 ```
 # 1. Add the adlist source (the router will download and re-download on a timer)
 /ip/dns/adlist
-add url=https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/adlist-medium.txt \
+add url=https://raw.githubusercontent.com/StefanKnol/mikrotik-adlist/main/adlist-medium.txt \
     ssl-verify=yes \
     update-time=04:00:00 \
     update-interval=1d \
@@ -132,7 +117,7 @@ print
 
 A few things to know:
 
-- `/ip/dns/adlist` was added in RouterOS 7.15. You're on 7.22.1, so it's there.
+- `/ip/dns/adlist` was added in RouterOS 7.15.
 - `update-interval=1d` is fine; the GitHub Action runs weekly anyway.
 - `cache-size` should comfortably exceed the file size. ~20 MiB covers the
   medium tier; bump to 40-60 MiB for the large tier.

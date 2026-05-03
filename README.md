@@ -146,7 +146,7 @@ A few things to know:
 
 - `/ip/dns/adlist` was added in RouterOS 7.15.
 - `cache-size` should comfortably exceed the file size. ~20 MiB covers the
-  medium tier; bump to 40-60 MiB for the large tier.
+  medium tier; bump to 40-60 MiB for the large tier; and bump to 200 MiB for the full tier.
 - The router stores the parsed list in DNS cache. If you reboot, it re-fetches.
 - If clients use IPv6 directly, add `dns-static` filtering or block external
   DoH/DoT outbound, otherwise clients can bypass router DNS.

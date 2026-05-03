@@ -1,9 +1,8 @@
 # MikroTik Combined De-Duplicated Adlist
 
 Automation that fetches multiple upstream ad-block / malware / phishing host
-lists, deduplicates them, applies a personal allowlist, and publishes a single
-clean hosts file that a MikroTik RouterOS 7 router can consume directly via
-its built-in `/ip/dns/adlist` feature.
+lists, deduplicates them, and publishes a single clean hosts file that a 
+MikroTik RouterOS 7 router can consume directly via its built-in `/ip/dns/adlist` feature.
 
 The merge runs on GitHub's free runners on a weekly schedule (and on demand).
 Your router fetches the resulting file from a stable raw URL on this repo, so
@@ -36,26 +35,57 @@ no extra server is needed.
 
 ## Picking a tier
 
-Three outputs are pre-configured. RAM cost in RouterOS 7 DNS cache is roughly
-100-150 bytes per entry, plus the cache size you set.
+Six outputs are produced. Numbers below are from an actual workflow run, not
+estimates. RAM cost in RouterOS 7 DNS cache is roughly 100-150 bytes per
+entry, plus the cache size you set.
 
-| Output                | Approx. entries    | Recommended for                            |
-| --------------------- | -----------------: | ------------------------------------------ |
-| `adlist-small.txt`    |    ~50 000         | hAP lite / hAP ac, 256 MB RAM, anything    |
-| `adlist-medium.txt`   |   ~200 000         | hEX, RB4011, CCR with 256-512 MB           |
-| `adlist-large.txt`    |   ~500 000-700 000 | CCR / RB5009 with >= 512 MB RAM            |
-| `adlist-full.txt`     | ~1 000 000-1 300 000 | CCR / RB5009 with 1 GB+ RAM, the kitchen sink |
-| `adlist-everything.txt` | ~1 800 000-2 200 000 | Curiosity tier - every IgorKha list, see warnings below |
+Numbers below are from a real workflow run.
+
+| Output                          |    Final   |     Raw    |    Dups    | Overlap | Allow-rm |
+| ------------------------------- | ---------: | ---------: | ---------: | ------: | -------: |
+| `adlist-small.txt`              |    136 076 |    139 756 |      3 650 |   2.6 % |       30 |
+| `adlist-medium.txt`             |    398 454 |    489 565 |     91 038 |  18.6 % |       73 |
+| `adlist-large.txt`              |    627 396 |    853 590 |    226 088 |  26.5 % |      106 |
+| `adlist-full.txt`               |  1 391 949 |  2 387 827 |    995 627 |  41.7 % |      251 |
+| `adlist-almost-everything.txt`  |  2 370 746 |  4 554 900 |  2 183 894 |  47.9 % |      260 |
+| `adlist-everything.txt`         |  2 390 975 |  4 575 544 |  2 184 297 |  47.7 % |      272 |
+
+- **Final** = entries written to file (after dedupe AND allowlist).
+- **Raw** = total parsed across all sources (sum, with duplicates).
+- **Dups** = entries removed by dedupe (Raw - Unique).
+- **Overlap** = Dups / Raw, i.e. how much of the raw input was redundant.
+- **Allow-rm** = entries removed by `allowlist.txt`.
 
 If unsure, start with `adlist-small.txt` and watch the router's RAM usage.
 
+### Diminishing returns
+
+Net new domains contributed per added source, from the same run:
+
+| Step                              | Added sources | New entries  | Per source |
+| --------------------------------- | ------------: | -----------: | ---------: |
+| small -> medium                   |             3 |      262 378 |     87 459 |
+| medium -> large                   |             2 |      228 942 |    114 471 |
+| large -> full                     |            14 |      764 553 |     54 611 |
+| full -> almost-everything         |            42 |      978 797 |     23 305 |
+| almost-everything -> everything   |             3 |       20 229 |      6 743 |
+
+The last 3 lists (`no_google.txt`,
+`hagezi_encrypted_dns_vpn_tor_proxy_bypass.txt`,
+`hagezi_allowlist_referral.txt`) add only 20 229 unique domains -
+roughly 0.85 % of the universe. So `almost-everything` is essentially
+the same coverage as `everything` minus the false-positive risk.
+
+Coverage-per-megabyte of cache is best around the **large** tier.
+Anything past the **full** tier pays a steep tax for shrinking returns.
+
 ### About the `full` tier
 
-This mirrors StevenBlack + 1Hosts family + AdGuard + Dandelion Sprouts + 
-Hagezi pro++/ultimate + OISD full + Phishing Army + Shadow Whisperer 
-merged into one file. Total raw entries across all upstream sources is 
-around **2.52 million**; after dedupe it should land at **roughly 1.0 - 
-1.3 million unique** domains.
+This mirrors original 21-adlist setup (StevenBlack + 1Hosts family +
+AdGuard + Dandelion Sprouts + Hagezi pro++/ultimate + OISD full + Phishing
+Army + Shadow Whisperer) merged into one file. Total raw
+entries across all upstream sources is around **2.52 million**; after dedupe
+it should land at **roughly 1.0 - 1.3 million unique** domains.
 
 Replacing the 21 adlist URLs on the router with one merged URL has two wins:
 
@@ -66,10 +96,10 @@ Replacing the 21 adlist URLs on the router with one merged URL has two wins:
 ### About the `everything` tier
 
 This pulls **every** file from `IgorKha/mikrotik-adlist/hosts/` (all 65) plus
-StevenBlacks list. About 3.5-4.5 million raw entries
+StevenBlack. About 3.5-4.5 million raw entries
 before dedupe; expect roughly 1.8-2.2 million unique after.
 
-It includes lists you probably do **not** want:
+It includes lists you probably do **not** want in production:
 
 - `no_google.txt` - would block Google services (mitigated: `google.com`,
   `googleapis.com`, `gstatic.com`, `googleusercontent.com`, `youtube.com`,
@@ -97,13 +127,10 @@ in `sources.yaml`. Do not add it.
 ## Configure the MikroTik (RouterOS 7.22.1)
 
 ```
-# 1. Add the adlist source (the router will download and re-download on a timer)
+# 1. Add the adlist source
 /ip/dns/adlist
 add url=https://raw.githubusercontent.com/StefanKnol/mikrotik-adlist/main/adlist-medium.txt \
-    ssl-verify=yes \
-    update-time=04:00:00 \
-    update-interval=1d \
-    comment="Combined adlist (auto-generated)"
+    ssl-verify=yes
 
 # 2. Make sure DNS has enough cache for the list
 /ip/dns
@@ -118,7 +145,6 @@ print
 A few things to know:
 
 - `/ip/dns/adlist` was added in RouterOS 7.15.
-- `update-interval=1d` is fine; the GitHub Action runs weekly anyway.
 - `cache-size` should comfortably exceed the file size. ~20 MiB covers the
   medium tier; bump to 40-60 MiB for the large tier.
 - The router stores the parsed list in DNS cache. If you reboot, it re-fetches.

@@ -47,8 +47,6 @@ Numbers below are from a real workflow run.
 | `adlist-medium.txt`             |    398 454 |    489 565 |     91 038 |  18.6 % |       73 |
 | `adlist-large.txt`              |    627 396 |    853 590 |    226 088 |  26.5 % |      106 |
 | `adlist-full.txt`               |  1 391 949 |  2 387 827 |    995 627 |  41.7 % |      251 |
-| `adlist-almost-everything.txt`  |  2 370 746 |  4 554 900 |  2 183 894 |  47.9 % |      260 |
-| `adlist-everything.txt`         |  2 390 975 |  4 575 544 |  2 184 297 |  47.7 % |      272 |
 
 - **Final** = entries written to file (after dedupe AND allowlist).
 - **Raw** = total parsed across all sources (sum, with duplicates).
@@ -67,17 +65,8 @@ Net new domains contributed per added source, from the same run:
 | small -> medium                   |             3 |      262 378 |     87 459 |
 | medium -> large                   |             2 |      228 942 |    114 471 |
 | large -> full                     |            14 |      764 553 |     54 611 |
-| full -> almost-everything         |            42 |      978 797 |     23 305 |
-| almost-everything -> everything   |             3 |       20 229 |      6 743 |
-
-The last 3 lists (`no_google.txt`,
-`hagezi_encrypted_dns_vpn_tor_proxy_bypass.txt`,
-`hagezi_allowlist_referral.txt`) add only 20 229 unique domains -
-roughly 0.85 % of the universe. So `almost-everything` is essentially
-the same coverage as `everything` minus the false-positive risk.
 
 Coverage-per-megabyte of cache is best around the **large** tier.
-Anything past the **full** tier pays a steep tax for shrinking returns.
 
 ### About the `full` tier
 
@@ -92,28 +81,6 @@ Replacing the 21 adlist URLs on the router with one merged URL has two wins:
 - The router parses one file instead of 21 - much less CPU during refresh.
 - One static-DNS table instead of 21 overlapping ones - lower RAM and faster
   lookups.
-
-### About the `everything` tier
-
-This pulls **every** file from `IgorKha/mikrotik-adlist/hosts/` (all 65) plus
-StevenBlack. About 3.5-4.5 million raw entries
-before dedupe; expect roughly 1.8-2.2 million unique after.
-
-It includes lists you probably do **not** want in production:
-
-- `no_google.txt` - would block Google services (mitigated: `google.com`,
-  `googleapis.com`, `gstatic.com`, `googleusercontent.com`, `youtube.com`,
-  and `ytimg.com` are pre-allowlisted, so the parent-domain match strips
-  them all out).
-- `hagezi_allowlist_referral.txt` - IgorKha republishes it in hosts-format,
-  so it acts as a *blocklist* here. Probably not what hagezi intended.
-- `hagezi_encrypted_dns_vpn_tor_proxy_bypass.txt` - blocks DoH/DoT/VPN/Tor
-  providers like `cloudflare-dns.com`, `dns.google`, etc. May break things
-  you actually use.
-- All country-prefixed lists (CHN/HUN/KOR/POL/etc.).
-
-This tier exists for curiosity - to see how big the merged universe really
-gets. Not recommended for daily use; pick `adlist-full.txt` instead.
 
 ## Anti-Google lists are NOT included
 
